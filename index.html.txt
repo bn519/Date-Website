@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Omakase date?</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-top:#FFE9F0;
+    --bg-bottom:#FFF6F9;
+    --cat:#A6A5AE;
+    --cat-belly:#EFEAE1;
+    --cat-dark:#83786D;
+    --ear-inner:#6E6259;
+    --outline:#3B322C;
+    --rose:#D6547A;
+    --rose-dark:#B23A5E;
+    --leaf:#7A9B6E;
+    --blossom:#FFC9DA;
+    --blossom-center:#F6D976;
+    --ink:#6B2C3E;
+    --bubble:#FFFFFF;
+    --bubble-edge:#F3C9D6;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    height:100%;
+    margin:0;
+  }
+
+  body{
+    min-height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(120% 90% at 50% 0%, var(--bg-top) 0%, var(--bg-bottom) 60%);
+    font-family:'Quicksand', sans-serif;
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 24px)
+      max(20px, env(safe-area-inset-right, 0px))
+      calc(env(safe-area-inset-bottom, 0px) + 24px)
+      max(20px, env(safe-area-inset-left, 0px));
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .blossom{ animation: drift 7s ease-in-out infinite; }
+    .blossom.b2{ animation-duration:8.5s; animation-delay:.6s; }
+    .blossom.b3{ animation-duration:6.5s; animation-delay:1.2s; }
+    .blossom.b4{ animation-duration:9s; animation-delay:.3s; }
+    .blossom.b5{ animation-duration:7.5s; animation-delay:1.6s; }
+    .blossom.b6{ animation-duration:8s; animation-delay:.9s; }
+    @keyframes drift{
+      0%,100%{ transform: translateY(0) rotate(0deg); }
+      50%{ transform: translateY(-10px) rotate(8deg); }
+    }
+    .tail{ animation: sway 3.2s ease-in-out infinite; transform-origin: 150px 210px; }
+    @keyframes sway{
+      0%,100%{ transform: rotate(0deg); }
+      50%{ transform: rotate(6deg); }
+    }
+  }
+
+  .frame{
+    position:relative;
+    width:min(92vw, 480px);
+    max-height:92vh;
+    background: var(--bubble);
+    border-radius: 28px;
+    box-shadow:
+      0 30px 60px -20px rgba(107,44,62,0.28),
+      0 0 0 1px rgba(255,255,255,0.6) inset;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+
+  .border-svg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+  }
+
+  .content{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 15% 12% 9%;
+    text-align:center;
+  }
+
+  .cat-wrap{
+    width: 62%;
+    max-width: 260px;
+    margin-bottom: -2%;
+  }
+
+  .cat-wrap svg{ width:100%; height:auto; display:block; }
+
+  .bubble{
+    position:relative;
+    background: var(--bubble);
+    border: 2.5px solid var(--bubble-edge);
+    border-radius: 26px;
+    padding: 18px 22px 16px;
+    box-shadow: 0 14px 28px -14px rgba(107,44,62,0.35);
+    margin-bottom: 14px;
+  }
+
+  .bubble::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-14px;
+    transform: translateX(-50%);
+    width:0; height:0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 16px solid var(--bubble-edge);
+  }
+
+  .bubble::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-10.5px;
+    transform: translateX(-50%);
+    width:0; height:0;
+    border-left: 9.5px solid transparent;
+    border-right: 9.5px solid transparent;
+    border-top: 13px solid var(--bubble);
+    z-index:1;
+  }
+
+  .headline{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size: clamp(2.2rem, 8.5vw, 3rem);
+    color: var(--ink);
+    line-height:1;
+    letter-spacing:0.5px;
+  }
+
+  .date-card{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background: rgba(255,255,255,0.7);
+    border: 1.5px solid var(--bubble-edge);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-weight:600;
+    font-size: clamp(0.95rem, 3.4vw, 1.05rem);
+    color: var(--ink);
+  }
+
+  .date-card svg{ width:16px; height:16px; flex:none; }
+
+  @media (prefers-color-scheme: dark) and (not (prefers-contrast: more)) {
+    /* Keep the card itself light and pink regardless of system theme, per the brief */
+  }
+
+  /* ---- Buttons ---- */
+  .actions{
+    display:flex;
+    gap:12px;
+    margin-top:18px;
+  }
+
+  .btn{
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+    border-radius: 999px;
+    padding: 12px 26px;
+    border: none;
+    cursor:pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .btn:focus-visible{
+    outline: 3px solid var(--rose-dark);
+    outline-offset: 2px;
+  }
+
+  .btn-yes{
+    background: var(--rose);
+    color:#fff;
+    box-shadow: 0 10px 20px -8px rgba(214,84,122,0.6);
+  }
+
+  .btn-yes:hover{ transform: translateY(-2px); }
+  .btn-yes:active{ transform: translateY(0); }
+
+  .btn-no{
+    background: transparent;
+    color: var(--ink);
+    border: 2px solid var(--bubble-edge);
+  }
+
+  .btn-no:hover{ transform: translateY(-2px); }
+  .btn-no:active{ transform: translateY(0); }
+
+  /* ---- Confetti ---- */
+  #confetti-layer{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:50;
+  }
+
+  .confetti-piece{
+    position:absolute;
+    top:-20px;
+    border-radius:2px;
+    opacity:0.95;
+    animation-name: confetti-fall;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes confetti-fall{
+    0%{
+      transform: translateY(0) rotate(0deg);
+      opacity:1;
+    }
+    100%{
+      transform: translateY(115vh) rotate(540deg);
+      opacity:0.9;
+    }
+  }
+
+  /* ---- Modal ---- */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(107,44,62,0.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:60;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.2s ease;
+  }
+
+  .modal-overlay.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .modal-card{
+    background: var(--bubble);
+    border: 2.5px solid var(--bubble-edge);
+    border-radius: 22px;
+    padding: 26px 24px 22px;
+    max-width: 300px;
+    width:100%;
+    text-align:center;
+    box-shadow: 0 24px 48px -18px rgba(107,44,62,0.45);
+    transform: scale(0.92);
+    transition: transform 0.2s ease;
+  }
+
+  .modal-overlay.open .modal-card{
+    transform: scale(1);
+  }
+
+  .modal-text{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size: clamp(1.6rem, 6vw, 2rem);
+    color: var(--ink);
+    line-height:1.1;
+    margin-bottom:16px;
+  }
+
+  .modal-ok{
+    background: var(--rose);
+    color:#fff;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:0.95rem;
+    border:none;
+    border-radius:999px;
+    padding:10px 28px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- Decorative border: roses in the corners, cherry blossoms drifting along the edges -->
+  <svg class="border-svg" viewBox="0 0 480 640" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- soft inner hairline -->
+    <rect x="14" y="14" width="452" height="612" rx="20" fill="none" stroke="var(--bubble-edge)" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round" opacity="0.9"/>
+
+    <!-- Top-left ribbon + rose cluster -->
+    <g transform="translate(18,14)">
+      <path d="M20 34 C4 18 4 2 20 0 C28 -1 34 8 34 8 C34 8 40 -1 48 0 C64 2 64 18 48 34 C40 42 34 34 34 34 C34 34 28 42 20 34 Z" fill="var(--rose-dark)" opacity="0.9"/>
+      <circle cx="34" cy="20" r="6" fill="#fff" opacity="0.55"/>
+    </g>
+    <g transform="translate(30,46) scale(0.9)">
+      <ellipse cx="0" cy="18" rx="4" ry="16" fill="var(--leaf)" transform="rotate(-25 0 18)"/>
+      <ellipse cx="16" cy="18" rx="4" ry="16" fill="var(--leaf)" transform="rotate(20 16 18)"/>
+      <circle cx="8" cy="6" r="11" fill="var(--rose)"/>
+      <circle cx="8" cy="6" r="7" fill="var(--rose-dark)" opacity="0.55"/>
+      <circle cx="8" cy="6" r="3.4" fill="var(--rose-dark)"/>
+    </g>
+
+    <!-- Top-right ribbon + rose cluster -->
+    <g transform="translate(462,14) scale(-1,1)">
+      <path d="M20 34 C4 18 4 2 20 0 C28 -1 34 8 34 8 C34 8 40 -1 48 0 C64 2 64 18 48 34 C40 42 34 34 34 34 C34 34 28 42 20 34 Z" fill="var(--rose-dark)" opacity="0.9"/>
+      <circle cx="34" cy="20" r="6" fill="#fff" opacity="0.55"/>
+    </g>
+    <g transform="translate(450,46) scale(-0.9,0.9)">
+      <ellipse cx="0" cy="18" rx="4" ry="16" fill="var(--leaf)" transform="rotate(-25 0 18)"/>
+      <ellipse cx="16" cy="18" rx="4" ry="16" fill="var(--leaf)" transform="rotate(20 16 18)"/>
+      <circle cx="8" cy="6" r="11" fill="var(--rose)"/>
+      <circle cx="8" cy="6" r="7" fill="var(--rose-dark)" opacity="0.55"/>
+      <circle cx="8" cy="6" r="3.4" fill="var(--rose-dark)"/>
+    </g>
+
+    <!-- Bottom-left rose cluster -->
+    <g transform="translate(26,566)">
+      <ellipse cx="0" cy="18" rx="4" ry="16" fill="var(--leaf)" transform="rotate(-25 0 18)"/>
+      <ellipse cx="16" cy="18" rx="4" ry="16" fill="var(--leaf)" transform="rotate(20 16 18)"/>
+      <circle cx="8" cy="30" r="11" fill="var(--rose)"/>
+      <circle cx="8" cy="30" r="7" fill="var(--rose-dark)" opacity="0.55"/>
+      <circle cx="8" cy="30" r="3.4" fill="var(--rose-dark)"/>
+    </g>
+
+    <!-- Bottom-right rose cluster -->
+    <g transform="translate(454,566) scale(-1,1)">
+      <ellipse cx="0" cy="18" rx="4" ry="16" fill="var(--leaf)" transform="rotate(-25 0 18)"/>
+      <ellipse cx="16" cy="18" rx="4" ry="16" fill="var(--leaf)" transform="rotate(20 16 18)"/>
+      <circle cx="8" cy="30" r="11" fill="var(--rose)"/>
+      <circle cx="8" cy="30" r="7" fill="var(--rose-dark)" opacity="0.55"/>
+      <circle cx="8" cy="30" r="3.4" fill="var(--rose-dark)"/>
+    </g>
+
+    <!-- Cherry blossoms drifting along the side edges -->
+    <g class="blossom b1" transform="translate(26,150)">
+      <g>
+        <circle cx="6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="12" cy="0" r="6.5" fill="var(--blossom)"/>
+        <circle cx="6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="3" cy="0" r="4" fill="var(--blossom-center)"/>
+      </g>
+    </g>
+
+    <g class="blossom b2" transform="translate(454,230) scale(0.75)">
+      <g>
+        <circle cx="6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="12" cy="0" r="6.5" fill="var(--blossom)"/>
+        <circle cx="6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="3" cy="0" r="4" fill="var(--blossom-center)"/>
+      </g>
+    </g>
+
+    <g class="blossom b3" transform="translate(30,320) scale(0.6)">
+      <g>
+        <circle cx="6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="12" cy="0" r="6.5" fill="var(--blossom)"/>
+        <circle cx="6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="3" cy="0" r="4" fill="var(--blossom-center)"/>
+      </g>
+    </g>
+
+    <g class="blossom b4" transform="translate(452,400) scale(0.85)">
+      <g>
+        <circle cx="6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="12" cy="0" r="6.5" fill="var(--blossom)"/>
+        <circle cx="6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="3" cy="0" r="4" fill="var(--blossom-center)"/>
+      </g>
+    </g>
+
+    <g class="blossom b5" transform="translate(24,480) scale(0.7)">
+      <g>
+        <circle cx="6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="12" cy="0" r="6.5" fill="var(--blossom)"/>
+        <circle cx="6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="3" cy="0" r="4" fill="var(--blossom-center)"/>
+      </g>
+    </g>
+
+    <g class="blossom b6" transform="translate(456,120) scale(0.55)">
+      <g>
+        <circle cx="6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="12" cy="0" r="6.5" fill="var(--blossom)"/>
+        <circle cx="6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="-6" cy="-8" r="6.5" fill="var(--blossom)"/>
+        <circle cx="3" cy="0" r="4" fill="var(--blossom-center)"/>
+      </g>
+    </g>
+
+  </svg>
+
+  <div class="content">
+
+    <div class="cat-wrap">
+      <!-- Bold-outline sticker-style cartoon cat, sitting, in the style of the reference image -->
+      <svg viewBox="0 0 210 250" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- tail, curling up and to the side -->
+        <path class="tail" d="M150 210 C190 208 205 175 195 145 C190 128 170 122 162 135 C158 143 165 150 172 146 C180 142 186 155 178 165 C170 176 152 178 145 168 Z" fill="var(--cat)" stroke="var(--outline)" stroke-width="4.5" stroke-linejoin="round"/>
+
+        <!-- body, sitting (domed top tucks well behind the head) -->
+        <path d="M50 236 C38 188 44 132 105 130 C166 132 172 188 160 236 Z" fill="var(--cat)" stroke="var(--outline)" stroke-width="4.5" stroke-linejoin="round"/>
+
+        <!-- light belly patch -->
+        <path d="M86 186 C80 208 82 228 92 236 L118 236 C128 228 130 208 124 186 C114 196 96 196 86 186 Z" fill="var(--cat-belly)" opacity="0.95"/>
+
+        <!-- front paws with pads and toe creases -->
+        <ellipse cx="78" cy="232" rx="22" ry="18" fill="var(--cat)" stroke="var(--outline)" stroke-width="4.5"/>
+        <ellipse cx="142" cy="232" rx="22" ry="18" fill="var(--cat)" stroke="var(--outline)" stroke-width="4.5"/>
+        <ellipse cx="78" cy="236" rx="8.5" ry="6.5" fill="#F8C6A8"/>
+        <ellipse cx="142" cy="236" rx="8.5" ry="6.5" fill="#F8C6A8"/>
+        <path d="M66 222 Q78 215 90 222" fill="none" stroke="var(--outline)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M130 222 Q142 215 154 222" fill="none" stroke="var(--outline)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M105 206 C102 218 102 228 105 236" fill="none" stroke="var(--outline)" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- ears -->
+        <path d="M44 104 C34 72 40 42 62 36 C84 42 88 72 78 100 C70 110 52 112 44 104 Z" fill="var(--cat)" stroke="var(--outline)" stroke-width="4.5" stroke-linejoin="round"/>
+        <path d="M166 104 C176 72 170 42 148 36 C126 42 122 72 132 100 C140 110 158 112 166 104 Z" fill="var(--cat)" stroke="var(--outline)" stroke-width="4.5" stroke-linejoin="round"/>
+        <path d="M52 90 C48 72 51 56 60 50 C70 56 72 74 66 88 C62 94 56 94 52 90 Z" fill="var(--ear-inner)"/>
+        <path d="M158 90 C162 72 159 56 150 50 C140 56 138 74 144 88 C148 94 154 94 158 90 Z" fill="var(--ear-inner)"/>
+
+        <!-- head (shorter, less tall) -->
+        <path d="M40 118 C38 70 70 40 105 40 C140 40 172 70 170 118 C168 138 152 152 105 154 C58 152 42 138 40 118 Z" fill="var(--cat)" stroke="var(--outline)" stroke-width="4.5" stroke-linejoin="round"/>
+
+        <!-- big glossy eyes -->
+        <ellipse cx="76" cy="98" rx="11" ry="14" fill="#2A2620"/>
+        <ellipse cx="134" cy="98" rx="11" ry="14" fill="#2A2620"/>
+        <circle cx="72" cy="90" r="3.6" fill="#FFFFFF"/>
+        <circle cx="130" cy="90" r="3.6" fill="#FFFFFF"/>
+
+        <!-- blush -->
+        <ellipse cx="58" cy="122" rx="13" ry="9" fill="#F8C6A8"/>
+        <ellipse cx="152" cy="122" rx="13" ry="9" fill="#F8C6A8"/>
+
+        <!-- nose -->
+        <ellipse cx="105" cy="116" rx="4.5" ry="3.2" fill="#4A4038"/>
+
+        <!-- w-shaped smile -->
+        <path d="M90 122 C94 130 100 130 104 122 C108 130 114 130 118 122" fill="none" stroke="var(--outline)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- whiskers -->
+        <path d="M20 98 L54 102 M18 114 L54 114 M22 130 L54 124" stroke="var(--outline)" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M190 98 L156 102 M192 114 L156 114 M188 130 L156 124" stroke="var(--outline)" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="bubble">
+      <div class="headline">Omakase&nbsp;date?</div>
+    </div>
+
+    <div class="date-card">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="5" width="18" height="16" rx="3" stroke="var(--ink)" stroke-width="1.8"/>
+        <path d="M3 9H21" stroke="var(--ink)" stroke-width="1.8"/>
+        <path d="M8 3V7" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M16 3V7" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span>November 6th @ 7:30pm</span>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-yes" id="yes-btn" onclick="if(window.launchConfetti)window.launchConfetti();">Yes!</button>
+      <button type="button" class="btn btn-no" id="no-btn" onclick="if(window.openDateModal)window.openDateModal();">No....</button>
+    </div>
+
+  </div>
+</div>
+
+<div id="confetti-layer" aria-hidden="true"></div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-text">Wrong answer, try again.</div>
+    <button type="button" class="modal-ok" id="modal-ok">Okay!</button>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var yesBtn = document.getElementById('yes-btn');
+    var noBtn = document.getElementById('no-btn');
+    var modal = document.getElementById('modal-overlay');
+    var modalOk = document.getElementById('modal-ok');
+    var confettiLayer = document.getElementById('confetti-layer');
+
+    var confettiColors = ['#D6547A', '#FFC9DA', '#F6D976', '#F4A6BE', '#B23A5E', '#FFFFFF'];
+
+    function launchConfetti(){
+      var count = 120;
+      for (var i = 0; i < count; i++){
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+
+        var size = 6 + Math.random() * 8;
+        var isRound = Math.random() > 0.5;
+        piece.style.width = size + 'px';
+        piece.style.height = (isRound ? size : size * 1.6) + 'px';
+        piece.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+        if (isRound) piece.style.borderRadius = '50%';
+
+        var left = Math.random() * 100;
+        piece.style.left = left + 'vw';
+
+        var duration = 2.6 + Math.random() * 1.8;
+        var delay = Math.random() * 0.4;
+        piece.style.animationDuration = duration + 's';
+        piece.style.animationDelay = delay + 's';
+
+        confettiLayer.appendChild(piece);
+
+        (function(el, totalTime){
+          setTimeout(function(){
+            if (el.parentNode) el.parentNode.removeChild(el);
+          }, totalTime * 1000);
+        })(piece, duration + delay + 0.2);
+      }
+    }
+
+    yesBtn.addEventListener('click', function(){
+      launchConfetti();
+    });
+    window.launchConfetti = launchConfetti;
+
+    function openModal(){
+      modal.classList.add('open');
+    }
+    function closeModal(){
+      modal.classList.remove('open');
+    }
+    window.openDateModal = openModal;
+
+    noBtn.addEventListener('click', openModal);
+    modalOk.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeModal();
+    });
+  })();
+</script>
+
+</body>
+</html>
